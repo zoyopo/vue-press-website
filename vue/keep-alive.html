@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>浅谈keep-alive原理 | 小笼包的包子铺</title>
+    <meta name="description" content="just for share">
+    
+    
+    <link rel="preload" href="/assets/css/0.styles.d85a7669.css" as="style"><link rel="preload" href="/assets/js/app.860993eb.js" as="script"><link rel="preload" href="/assets/js/3.9fa3b24c.js" as="script"><link rel="preload" href="/assets/js/2.10a39c0e.js" as="script"><link rel="preload" href="/assets/js/32.ff3d5fb7.js" as="script"><link rel="prefetch" href="/assets/js/10.d744a85c.js"><link rel="prefetch" href="/assets/js/11.79172404.js"><link rel="prefetch" href="/assets/js/12.8abc8a57.js"><link rel="prefetch" href="/assets/js/13.74af0142.js"><link rel="prefetch" href="/assets/js/14.91a5391a.js"><link rel="prefetch" href="/assets/js/15.a9394941.js"><link rel="prefetch" href="/assets/js/16.6fa04b8e.js"><link rel="prefetch" href="/assets/js/17.97aa6e29.js"><link rel="prefetch" href="/assets/js/18.979e9669.js"><link rel="prefetch" href="/assets/js/19.8d5234ad.js"><link rel="prefetch" href="/assets/js/20.04c01301.js"><link rel="prefetch" href="/assets/js/21.244af0bf.js"><link rel="prefetch" href="/assets/js/22.2ac786e7.js"><link rel="prefetch" href="/assets/js/23.1c0e1bd3.js"><link rel="prefetch" href="/assets/js/24.0427e3d9.js"><link rel="prefetch" href="/assets/js/25.921c7c35.js"><link rel="prefetch" href="/assets/js/26.da848384.js"><link rel="prefetch" href="/assets/js/27.836968c2.js"><link rel="prefetch" href="/assets/js/28.7fe6d8e5.js"><link rel="prefetch" href="/assets/js/29.ba0d2cfe.js"><link rel="prefetch" href="/assets/js/30.681bad5c.js"><link rel="prefetch" href="/assets/js/31.3c8589bc.js"><link rel="prefetch" href="/assets/js/33.5aa0df19.js"><link rel="prefetch" href="/assets/js/4.e3b7014b.js"><link rel="prefetch" href="/assets/js/5.f3afb07e.js"><link rel="prefetch" href="/assets/js/6.71b56f38.js"><link rel="prefetch" href="/assets/js/7.a47de12c.js"><link rel="prefetch" href="/assets/js/8.889157b1.js"><link rel="prefetch" href="/assets/js/9.7515ecef.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.d85a7669.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><!----> <span class="site-name">小笼包的包子铺</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/" class="nav-link">主页</a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title">技术分享</span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/js/" class="nav-link">js</a></li><li class="dropdown-item"><!----> <a href="/OS/" class="nav-link">操作系统</a></li><li class="dropdown-item"><!----> <a href="/vue/" class="nav-link router-link-active">vue</a></li><li class="dropdown-item"><!----> <a href="/react/" class="nav-link">react</a></li><li class="dropdown-item"><!----> <a href="/compatibility/" class="nav-link">兼容性</a></li><li class="dropdown-item"><!----> <a href="/cssFragment/" class="nav-link">css代码段</a></li></ul></div></div><div class="nav-item"><a href="/lifeStyle/" class="nav-link">生活点滴</a></div><div class="nav-item"><a href="https://github.com/godlikedeveloper" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title">读书笔记</span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/cssSecretStudy/" class="nav-link">css揭秘</a></li></ul></div></div><div class="nav-item"><a href="http://u-to-world.com:8080/index.html" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  MUSIC
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/" class="nav-link">主页</a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title">技术分享</span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/js/" class="nav-link">js</a></li><li class="dropdown-item"><!----> <a href="/OS/" class="nav-link">操作系统</a></li><li class="dropdown-item"><!----> <a href="/vue/" class="nav-link router-link-active">vue</a></li><li class="dropdown-item"><!----> <a href="/react/" class="nav-link">react</a></li><li class="dropdown-item"><!----> <a href="/compatibility/" class="nav-link">兼容性</a></li><li class="dropdown-item"><!----> <a href="/cssFragment/" class="nav-link">css代码段</a></li></ul></div></div><div class="nav-item"><a href="/lifeStyle/" class="nav-link">生活点滴</a></div><div class="nav-item"><a href="https://github.com/godlikedeveloper" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title">读书笔记</span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/cssSecretStudy/" class="nav-link">css揭秘</a></li></ul></div></div><div class="nav-item"><a href="http://u-to-world.com:8080/index.html" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  MUSIC
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div> <!----></nav>  <ul class="sidebar-links"><li><a href="/vue/breadcrumb-design.html" class="sidebar-link">一个使用v-router + vuex 的面包屑组件方案</a></li><li><a href="/vue/buildVuepress.html" class="sidebar-link">搭建vuepress</a></li><li><a href="/vue/deployScript.html" class="sidebar-link">本地打包部署脚本</a></li><li><a href="/vue/keep-alive.html" class="active sidebar-link">浅谈keep-alive原理</a><ul class="sidebar-sub-headers"></ul></li></ul> </aside> <main class="page"> <div class="content default"><h3 id="浅谈keep-alive原理"><a href="#浅谈keep-alive原理" aria-hidden="true" class="header-anchor">#</a> 浅谈keep-alive原理</h3> <h4 id="用法"><a href="#用法" aria-hidden="true" class="header-anchor">#</a> 用法</h4> <div class="language- extra-class"><pre class="language-text"><code>&lt;template&gt;
+&lt;div&gt;
+    &lt;keep-alive&gt;
+        &lt;coma v-if=&quot;test&quot;&gt;&lt;/coma&gt;
+        &lt;comb v-else&gt;&lt;/comb&gt;
+    &lt;/keep-alive&gt;
+    &lt;button @click=&quot;test=handleClick&quot;&gt;请点击&lt;/button&gt;
+&lt;/div&gt;
+&lt;/template&gt;
+import coma from 'a'
+import comb from 'b'
+export default {
+    components:[coma,comb],
+    data () {
+        return {
+            test: true
+        }
+    },
+    methods: {
+        handleClick () {
+            this.test = !this.test;
+        }
+    }
+}
+</code></pre></div><p>点击按钮两个组件会进行切换 但是组件中的状态会被保留 比如渲染出的列表</p> <h4 id="include-exclude"><a href="#include-exclude" aria-hidden="true" class="header-anchor">#</a> include&amp;exclude</h4> <p><code>keep-alive</code>的<code>include</code>和<code>exclude</code>属性分别是允许缓存的组件和不被缓存的组件 二者都可以用逗号字符串，正则表达式，数组表示</p> <div class="language- extra-class"><pre class="language-text"><code>&lt;keep-alive include=&quot;a&quot;&gt;
+  &lt;component&gt;&lt;/component&gt;
+&lt;/keep-alive&gt;
+</code></pre></div><p>将缓存name为a的组件</p> <div class="language- extra-class"><pre class="language-text"><code>&lt;keep-alive exclude=&quot;a&quot;&gt;
+  &lt;component&gt;&lt;/component&gt;
+&lt;/keep-alive&gt;
+</code></pre></div><p>name为a的组件将不会被缓存。</p> <h4 id="生命钩子"><a href="#生命钩子" aria-hidden="true" class="header-anchor">#</a> 生命钩子</h4> <p><code>keep-alive</code>提供了两个生命钩子，分别是<code>activated</code>与<code>deactivated</code>。</p> <p>因为<code>keep-alive</code>会将组件保存在内存中，并不会销毁以及重新创建，所以不会重新调用组件的<code>created</code>等方法，需要用<code>activated</code>与<code>deactivated</code>这两个生命钩子来得知当前组件是否处于活动状态。</p> <h4 id="原理"><a href="#原理" aria-hidden="true" class="header-anchor">#</a> 原理</h4> <div class="language- extra-class"><pre class="language-text"><code>created () {
+    /* 缓存对象 */
+    this.cache = Object.create(null)
+}
+</code></pre></div><p>创建cache对象缓存vnode</p> <div class="language- extra-class"><pre class="language-text"><code>/* destroyed钩子中销毁所有cache中的组件实例 */
+destroyed () {
+    for (const key in this.cache) {
+        pruneCacheEntry(this.cache[key])
+    }
+},
+</code></pre></div><div class="language- extra-class"><pre class="language-text"><code>render () {
+    /* 得到slot插槽中的第一个组件 */
+    const vnode: VNode = getFirstComponentChild(this.$slots.default)
+
+    const componentOptions: ?VNodeComponentOptions = vnode &amp;&amp; vnode.componentOptions
+    if (componentOptions) {
+        // check pattern
+        /* 获取组件名称，优先获取组件的name字段，否则是组件的tag */
+        const name: ?string = getComponentName(componentOptions)
+        /* name不在inlcude中或者在exlude中则直接返回vnode（没有取缓存） */
+        if (name &amp;&amp; (
+        (this.include &amp;&amp; !matches(this.include, name)) ||
+        (this.exclude &amp;&amp; matches(this.exclude, name))
+        )) {
+            return vnode
+        }
+        const key: ?string = vnode.key == null
+        // same constructor may get registered as different local components
+        // so cid alone is not enough (#3269)
+        ? componentOptions.Ctor.cid + (componentOptions.tag ? `::${componentOptions.tag}` : '')
+        : vnode.key
+        /* 如果已经做过缓存了则直接从缓存中获取组件实例给vnode，还未缓存过则进行缓存 */
+        if (this.cache[key]) {
+            vnode.componentInstance = this.cache[key].componentInstance
+        } else {
+            this.cache[key] = vnode
+        }
+        /* keepAlive标记位 */
+        vnode.data.keepAlive = true
+    }
+    return vnode
+}
+</code></pre></div><p><code>render</code>函数中 先获取<code>name</code> 再根据<code>include</code>,<code>exclude</code>中的值进行匹配 匹配成功就返回缓存的<code>vnode</code> 不成功就不进行操作</p> <div class="language- extra-class"><pre class="language-text"><code>/* 检测name是否匹配 */
+function matches (pattern: string | RegExp, name: string): boolean {
+  if (typeof pattern === 'string') {
+    /* 字符串情况，如a,b,c */
+    return pattern.split(',').indexOf(name) &gt; -1
+  } else if (isRegExp(pattern)) {
+    /* 正则 */
+    return pattern.test(name)
+  }
+  /* istanbul ignore next */
+  return false
+}
+</code></pre></div><p>检测include与exclude属性匹配的函数很简单，include与exclude属性支持字符串如&quot;a,b,c&quot;这样组件名以逗号隔开的情况以及正则表达式。matches通过这两种方式分别检测是否匹配当前组件。</p> <div class="language- extra-class"><pre class="language-text"><code>if (this.cache[key]) {
+    vnode.componentInstance = this.cache[key].componentInstance
+} else {
+    this.cache[key] = vnode
+}
+</code></pre></div><p>缓存过就覆盖该<code>vnode</code>实例 没有就缓存</p> <p>但是如果我改变了<code>include</code>或<code>exclude</code>里的值咋办</p> <p>办法就是 用<code>watch</code>来监听<code>pruneCache</code>与<code>pruneCache</code>这两个属性的改变，在改变的时候修改<code>cache</code>缓存中的缓存数据。</p> <div class="language- extra-class"><pre class="language-text"><code>watch: {
+    /* 监视include以及exclude，在被修改的时候对cache进行修正 */
+    include (val: string | RegExp) {
+        pruneCache(this.cache, this._vnode, name =&gt; matches(val, name))
+    },
+    exclude (val: string | RegExp) {
+        pruneCache(this.cache, this._vnode, name =&gt; !matches(val, name))
+    }
+}
+</code></pre></div><p>pruneCache实现</p> <div class="language- extra-class"><pre class="language-text"><code>/* 修正cache */
+function pruneCache (cache: VNodeCache, current: VNode, filter: Function) {
+  for (const key in cache) {
+    /* 取出cache中的vnode */
+    const cachedNode: ?VNode = cache[key]
+    if (cachedNode) {
+      const name: ?string = getComponentName(cachedNode.componentOptions)
+      /* name不符合filter条件的，同时不是目前渲染的vnode时，销毁vnode对应的组件实例（Vue实例），并从cache中移除 */
+      if (name &amp;&amp; !filter(name)) {
+        if (cachedNode !== current) {
+          pruneCacheEntry(cachedNode)
+        }
+        cache[key] = null
+      }
+    }
+  }
+} 
+
+/* 销毁vnode对应的组件实例（Vue实例） */
+function pruneCacheEntry (vnode: ?VNode) {
+  if (vnode) {
+    vnode.componentInstance.$destroy()
+  }
+}
+
+</code></pre></div></div> <footer class="page-edit"><!----> <!----></footer> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/vue/deployScript.html" class="prev">
+          本地打包部署脚本
+        </a></span> <!----></p></div> </main></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.860993eb.js" defer></script><script src="/assets/js/3.9fa3b24c.js" defer></script><script src="/assets/js/2.10a39c0e.js" defer></script><script src="/assets/js/32.ff3d5fb7.js" defer></script>
+  </body>
+</html>

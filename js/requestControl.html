@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>axios防止多次点击请求生成多条数据 | 小笼包的包子铺</title>
+    <meta name="description" content="just for share">
+    
+    
+    <link rel="preload" href="/assets/css/0.styles.d85a7669.css" as="style"><link rel="preload" href="/assets/js/app.860993eb.js" as="script"><link rel="preload" href="/assets/js/3.9fa3b24c.js" as="script"><link rel="preload" href="/assets/js/2.10a39c0e.js" as="script"><link rel="preload" href="/assets/js/20.04c01301.js" as="script"><link rel="prefetch" href="/assets/js/10.d744a85c.js"><link rel="prefetch" href="/assets/js/11.79172404.js"><link rel="prefetch" href="/assets/js/12.8abc8a57.js"><link rel="prefetch" href="/assets/js/13.74af0142.js"><link rel="prefetch" href="/assets/js/14.91a5391a.js"><link rel="prefetch" href="/assets/js/15.a9394941.js"><link rel="prefetch" href="/assets/js/16.6fa04b8e.js"><link rel="prefetch" href="/assets/js/17.97aa6e29.js"><link rel="prefetch" href="/assets/js/18.979e9669.js"><link rel="prefetch" href="/assets/js/19.8d5234ad.js"><link rel="prefetch" href="/assets/js/21.244af0bf.js"><link rel="prefetch" href="/assets/js/22.2ac786e7.js"><link rel="prefetch" href="/assets/js/23.1c0e1bd3.js"><link rel="prefetch" href="/assets/js/24.0427e3d9.js"><link rel="prefetch" href="/assets/js/25.921c7c35.js"><link rel="prefetch" href="/assets/js/26.da848384.js"><link rel="prefetch" href="/assets/js/27.836968c2.js"><link rel="prefetch" href="/assets/js/28.7fe6d8e5.js"><link rel="prefetch" href="/assets/js/29.ba0d2cfe.js"><link rel="prefetch" href="/assets/js/30.681bad5c.js"><link rel="prefetch" href="/assets/js/31.3c8589bc.js"><link rel="prefetch" href="/assets/js/32.ff3d5fb7.js"><link rel="prefetch" href="/assets/js/33.5aa0df19.js"><link rel="prefetch" href="/assets/js/4.e3b7014b.js"><link rel="prefetch" href="/assets/js/5.f3afb07e.js"><link rel="prefetch" href="/assets/js/6.71b56f38.js"><link rel="prefetch" href="/assets/js/7.a47de12c.js"><link rel="prefetch" href="/assets/js/8.889157b1.js"><link rel="prefetch" href="/assets/js/9.7515ecef.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.d85a7669.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><!----> <span class="site-name">小笼包的包子铺</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/" class="nav-link">主页</a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title">技术分享</span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/js/" class="nav-link router-link-active">js</a></li><li class="dropdown-item"><!----> <a href="/OS/" class="nav-link">操作系统</a></li><li class="dropdown-item"><!----> <a href="/vue/" class="nav-link">vue</a></li><li class="dropdown-item"><!----> <a href="/react/" class="nav-link">react</a></li><li class="dropdown-item"><!----> <a href="/compatibility/" class="nav-link">兼容性</a></li><li class="dropdown-item"><!----> <a href="/cssFragment/" class="nav-link">css代码段</a></li></ul></div></div><div class="nav-item"><a href="/lifeStyle/" class="nav-link">生活点滴</a></div><div class="nav-item"><a href="https://github.com/godlikedeveloper" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title">读书笔记</span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/cssSecretStudy/" class="nav-link">css揭秘</a></li></ul></div></div><div class="nav-item"><a href="http://u-to-world.com:8080/index.html" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  MUSIC
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/" class="nav-link">主页</a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title">技术分享</span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/js/" class="nav-link router-link-active">js</a></li><li class="dropdown-item"><!----> <a href="/OS/" class="nav-link">操作系统</a></li><li class="dropdown-item"><!----> <a href="/vue/" class="nav-link">vue</a></li><li class="dropdown-item"><!----> <a href="/react/" class="nav-link">react</a></li><li class="dropdown-item"><!----> <a href="/compatibility/" class="nav-link">兼容性</a></li><li class="dropdown-item"><!----> <a href="/cssFragment/" class="nav-link">css代码段</a></li></ul></div></div><div class="nav-item"><a href="/lifeStyle/" class="nav-link">生活点滴</a></div><div class="nav-item"><a href="https://github.com/godlikedeveloper" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  Github
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title">读书笔记</span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/cssSecretStudy/" class="nav-link">css揭秘</a></li></ul></div></div><div class="nav-item"><a href="http://u-to-world.com:8080/index.html" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  MUSIC
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div> <!----></nav>  <ul class="sidebar-links"><li><a href="/js/" class="sidebar-link">js</a></li><li><a href="/js/requestControl.html" class="active sidebar-link">axios防止多次点击请求生成多条数据</a><ul class="sidebar-sub-headers"></ul></li><li><a href="/js/validate.html" class="sidebar-link">在vue中自己写的一个表单验证方法</a></li><li><a href="/js/GC.html" class="sidebar-link">从一个jQuery插件说说垃圾回收</a></li></ul> </aside> <main class="page"> <div class="content default"><h3 id="axios防止多次点击请求生成多条数据"><a href="#axios防止多次点击请求生成多条数据" aria-hidden="true" class="header-anchor">#</a> axios防止多次点击请求生成多条数据</h3> <h4 id="思路"><a href="#思路" aria-hidden="true" class="header-anchor">#</a> 思路</h4> <p>定一个数组，请求时把<code>url</code>+<code>method</code>放入，以此判断唯一性，下一次请求验证是否是同个请求，是的话，执行<code>axios</code>的<code>cancel</code>方法,请求完了从数组里面清除该请求。</p> <h4 id="code"><a href="#code" aria-hidden="true" class="header-anchor">#</a> code</h4> <div class="language- extra-class"><pre class="language-text"><code>//#region 
+/**
+ * 防止网络过慢时 发送重复请求
+ * 在下一个请求未完成时 取消掉之后的重复请求
+ */
+
+let pending = []
+let CancelToken = axios.CancelToken
+let removePending = (config, f) =&gt; {
+  let flagUrl = config.url + '&amp;' + config.method
+  console.log(pending)
+  console.log(flagUrl)
+  if (pending.indexOf(flagUrl) !== -1) {
+    if (f) {     
+     // console.log('--------romove request---------')
+      f() // 执行取消操作
+    } else {
+     // console.log('--------splice pending array---------')
+      pending.splice(pending.indexOf(flagUrl), 1)// 把这条记录从数组中移除
+    }
+  } else {
+    if (f) {
+    //  console.log('--------push pending array---------')
+      pending.push(flagUrl)
+    }
+  }
+}
+//#endregion
+
+const service = axios.create({
+  //	  baseURL: process.env.BASE_API, // api的base_url
+  //   timeout: 5000 // request timeout
+});
+service.interceptors.request.use(
+  config =&gt; {
+    if ((config.method === 'post' &amp;&amp; config.url &amp;&amp; config.url.indexOf('survey/isUsed/')&lt;0)
+      || config.method === 'put') {
+      //  console.log('--------request in---------')
+        config.cancelToken = new CancelToken((c) =&gt; {
+        removePending(config, c)
+      })
+    }
+    // Do something before request is sent
+   
+    return config;
+  },
+  error =&gt; {
+    // Do something with request error
+    console.log(error); // for debug
+    // Promise.reject(error);
+  }
+);
+/** 拦截器中统一处理错误提示*/
+service.interceptors.response.use(
+  response =&gt; {
+    if (response.config.method === 'post' || response.config.method === 'put') {
+    //  console.log('--------response in------------')
+    // 这边 让splice pending 数组慢一点 防止请求过快 出现两条重复数据
+      setTimeout(() =&gt; {
+        removePending(response.config)
+      },500);     
+    }  //在一个ajax响应后再执行一下取消操作，把已经完成的请求从pending中移除
+    // Do something with response data
+   
+    return response;
+  },
+  error =&gt; {    
+  
+    // Do something with request error
+ 
+    return { data: {message:error.toString()} }; 
+
+  }
+);
+
+</code></pre></div><h4 id="遇到的问题"><a href="#遇到的问题" aria-hidden="true" class="header-anchor">#</a> 遇到的问题</h4> <p>模拟慢网速是可以实现的，但是请求响应过快同样会放行。</p> <h4 id="解决方法"><a href="#解决方法" aria-hidden="true" class="header-anchor">#</a> 解决方法</h4> <p>在请求响应之后，给清除该<code>url</code>的方法加<code>500ms</code>延迟，这样就可以解决，清除过快导致的判断失效问题。</p></div> <footer class="page-edit"><!----> <!----></footer> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/js/" class="prev router-link-active">
+          js
+        </a></span> <span class="next"><a href="/js/validate.html">
+          在vue中自己写的一个表单验证方法
+        </a>
+        →
+      </span></p></div> </main></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.860993eb.js" defer></script><script src="/assets/js/3.9fa3b24c.js" defer></script><script src="/assets/js/2.10a39c0e.js" defer></script><script src="/assets/js/20.04c01301.js" defer></script>
+  </body>
+</html>
